@@ -14,47 +14,36 @@ test("renders without errors", () => {
 test("shows success message on submit with form details", async () => {
   render(<CheckoutForm />);
 
-  const firstName = screen.getByLabelText(/first name/i);
+  const firstName = screen.getByLabelText(/first name:/i);
   userEvent.type(firstName, "Devin");
-  const lastName = screen.getByLabelText(/last name/i);
+  const lastName = screen.getByLabelText(/last name:/i);
   userEvent.type(lastName, "McCourty");
-  const address = screen.getByLabelText(/address/i);
+  const address = screen.getByLabelText(/address:/i);
   userEvent.type(address, "101 Patriots Way");
-  const city = screen.getByLabelText(/city/i);
+  const city = screen.getByLabelText(/city:/i);
   userEvent.type(city, "Foxborough");
-  const state = screen.getByLabelText(/state/i);
+  const state = screen.getByLabelText(/state:/i);
   userEvent.type(state, "MA");
-  const zip = screen.getByLabelText(/zip/i);
+  const zip = screen.getByLabelText(/zip:/i);
   userEvent.type(zip, "02477");
   const checkout = screen.getByRole("button");
   userEvent.click(checkout);
 
   waitFor(async () => {
-    const orderSuccessMessage = screen.findByText(
-      "You have ordered some plants! Woo-hoo! 🎉"
+    const orderSuccessMessage = screen.getByText(
+      "You have ordered some plants! Woo-hoo!"
     );
-    expect(orderSuccessMessage).toBeTruthy();
-  });
-
-  waitFor(async () => {
-    const orderShippingMessage = screen.findByText(
+    const orderShippingMessage = screen.getByText(
       "Your new green friends will be shipped to:"
     );
-    expect(orderShippingMessage).toBeTruthy();
-  });
+    const firstAndLast = screen.getByText("Devin McCourty");
+    const address = screen.getByText("101 Patriots Way");
+    const cityStateZip = screen.getByText("Foxborough, MA 02477");
 
-  waitFor(async () => {
-    const firstAndLast = screen.findByText("Devin McCourty");
-    expect(firstAndLast).toBeTruthy();
-  });
-
-  waitFor(async () => {
-    const address = screen.findByText("101 Patriots Way");
-    expect(address).toBeTruthy();
-  });
-
-  waitFor(async () => {
-    const cityStateZip = screen.findByText("Foxborough, MA 02477");
-    expect(cityStateZip).toBeTruthy();
+    expect(orderSuccessMessage).toBeInTheDocument();
+    expect(orderShippingMessage).toBeInTheDocument();
+    expect(firstAndLast).toBeInTheDocument();
+    expect(address).toBeInTheDocument();
+    expect(cityStateZip).toBeInTheDocument();
   });
 });
